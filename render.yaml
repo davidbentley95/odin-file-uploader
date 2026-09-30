@@ -5,7 +5,7 @@ services:
     name: odin-file-uploader
     runtime: node
     plan: free
-    region: frankfurt
+    region: oregon
     healthCheckPath: /
     # --include=dev is belt and braces: some npm versions drop devDependencies
     # when NODE_ENV=production, and the build needs the Prisma CLI.
