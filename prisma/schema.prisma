@@ -1,0 +1,74 @@
+generator client {
+  provider               = "prisma-client"
+  output                 = "../generated/prisma"
+  runtime                = "nodejs"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  folders   Folder[]
+  files     File[]
+}
+
+model Folder {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  parentId  Int?
+  parent    Folder?  @relation("FolderTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Folder[] @relation("FolderTree")
+
+  files     File[]
+  shares    Share[]
+
+  @@index([ownerId, parentId])
+}
+
+model File {
+  id          Int      @id @default(autoincrement())
+  name        String
+  size        Int
+  mimeType    String
+  storagePath String
+  uploadedAt  DateTime @default(now())
+
+  ownerId     Int
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  folderId    Int?
+  folder      Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, folderId])
+}
+
+model Share {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  folderId  Int
+  folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}

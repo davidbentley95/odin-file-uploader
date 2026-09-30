@@ -1,0 +1,47 @@
+{
+  "name": "odin-file-uploader",
+  "version": "1.0.0",
+  "description": "A stripped-down Google Drive clone.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio",
+    "build": "prisma generate && prisma migrate deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidbentley95/odin-file-uploader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/davidbentley95/odin-file-uploader/issues"
+  },
+  "homepage": "https://github.com/davidbentley95/odin-file-uploader#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "@quixo3/prisma-session-store": "^3.1.21",
+    "@supabase/supabase-js": "^2.117.2",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.4",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "multer": "^2.4.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prisma": "^7.10.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

@@ -1,0 +1,18 @@
+<%- include('partials/head', { title: 'File Uploader' }) %>
+<%- include('partials/nav') %>
+
+<h1>File Uploader</h1>
+<p class="lede">
+  A stripped-down Drive: folders, uploads, and expiring share links.
+</p>
+
+<% if (currentUser) { %>
+  <p><a class="button" href="/drive">Go to my drive</a></p>
+<% } else { %>
+  <p>
+    <a class="button" href="/sign-up">Create an account</a>
+    <a href="/log-in">or log in</a>
+  </p>
+<% } %>
+
+<%- include('partials/footer') %>

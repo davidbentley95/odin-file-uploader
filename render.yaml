@@ -1,0 +1,29 @@
+# Render Blueprint. Either point Render at this file, or create the web service
+# by hand in the dashboard using the same build/start commands and variables.
+services:
+  - type: web
+    name: odin-file-uploader
+    runtime: node
+    plan: free
+    region: frankfurt
+    healthCheckPath: /
+    # --include=dev is belt and braces: some npm versions drop devDependencies
+    # when NODE_ENV=production, and the build needs the Prisma CLI.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Session cookies are signed with this. generateValue lets Render mint a
+      # random one, so the real secret never sits in the repo.
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SUPABASE_BUCKET
+        value: files
+      # sync: false means "prompt me in the dashboard" — never committed here.
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false

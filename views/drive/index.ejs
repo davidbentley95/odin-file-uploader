@@ -1,0 +1,121 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<nav class="breadcrumbs">
+  <a href="/drive">My Drive</a>
+  <% breadcrumbs.forEach((crumb, index) => { %>
+    /
+    <% if (index === breadcrumbs.length - 1) { %>
+      <%= crumb.name %>
+    <% } else { %>
+      <a href="/drive/folders/<%= crumb.id %>"><%= crumb.name %></a>
+    <% } %>
+  <% }) %>
+</nav>
+
+<h1><%= folder ? folder.name : 'My Drive' %></h1>
+
+<%- include('../partials/errors', { errors }) %>
+
+<% if (notices.length) { %>
+  <div class="notices">
+    <ul>
+      <% notices.forEach((notice) => { %>
+        <li><%= notice %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<div class="card">
+  <form method="POST" action="/drive/folders">
+    <% if (folder) { %>
+      <input type="hidden" name="parentId" value="<%= folder.id %>" />
+    <% } %>
+    <label>
+      <span>New folder</span>
+      <input type="text" name="name" maxlength="255" required />
+    </label>
+    <button type="submit">Create folder</button>
+  </form>
+</div>
+
+<div class="card">
+  <form method="POST" action="/drive/upload" enctype="multipart/form-data">
+    <% if (folder) { %>
+      <input type="hidden" name="folderId" value="<%= folder.id %>" />
+    <% } %>
+    <label>
+      <span>Upload a file (max 10 MB)</span>
+      <input type="file" name="file" required />
+    </label>
+    <button type="submit">Upload</button>
+  </form>
+</div>
+
+<% if (folder) { %>
+  <div class="card">
+    <form method="POST" action="/drive/folders/<%= folder.id %>/share">
+      <label>
+        <span>Share this folder with a public link</span>
+        <select name="days">
+          <option value="1">1 day</option>
+          <option value="7" selected>7 days</option>
+          <option value="30">30 days</option>
+        </select>
+      </label>
+      <button type="submit">Create share link</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <form method="POST" action="/drive/folders/<%= folder.id %>/rename">
+      <label>
+        <span>Rename this folder</span>
+        <input type="text" name="name" value="<%= folder.name %>" maxlength="255" required />
+      </label>
+      <button type="submit">Rename</button>
+    </form>
+  </div>
+<% } %>
+
+<% if (!folders.length && !files.length) { %>
+  <p class="empty">This folder is empty.</p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Size</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% folders.forEach((child) => { %>
+        <tr>
+          <td><a href="/drive/folders/<%= child.id %>"><%= child.name %></a></td>
+          <td class="meta">—</td>
+          <td class="actions">
+            <form method="POST" action="/drive/folders/<%= child.id %>/delete" class="inline">
+              <button type="submit" class="link-button">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+      <% files.forEach((file) => { %>
+        <tr>
+          <td><a href="/drive/files/<%= file.id %>"><%= file.name %></a></td>
+          <td class="meta"><%= formatSize(file.size) %></td>
+          <td class="actions">
+            <a href="/drive/files/<%= file.id %>/download">Download</a>
+            <form method="POST" action="/drive/files/<%= file.id %>/delete" class="inline">
+              <button type="submit" class="link-button">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('../partials/footer') %>

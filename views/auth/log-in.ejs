@@ -1,0 +1,22 @@
+<%- include('../partials/head', { title: 'Log in' }) %>
+<%- include('../partials/nav') %>
+
+<h1>Log in</h1>
+
+<%- include('../partials/errors', { errors }) %>
+
+<form method="POST" action="/log-in" class="card">
+  <label>
+    <span>Username</span>
+    <input type="text" name="username" required />
+  </label>
+  <label>
+    <span>Password</span>
+    <input type="password" name="password" required />
+  </label>
+  <button type="submit">Log in</button>
+</form>
+
+<p>No account yet? <a href="/sign-up">Sign up</a>.</p>
+
+<%- include('../partials/footer') %>

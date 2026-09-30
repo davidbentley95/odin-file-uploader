@@ -1,0 +1,41 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<nav class="breadcrumbs">
+  <a href="/drive">My Drive</a>
+  <% if (file.folder) { %>
+    / <a href="/drive/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+  <% } %>
+  / <%= file.name %>
+</nav>
+
+<h1><%= file.name %></h1>
+
+<dl class="details card">
+  <dt>Size</dt>
+  <dd><%= formatSize(file.size) %></dd>
+
+  <dt>Type</dt>
+  <dd><%= file.mimeType %></dd>
+
+  <dt>Uploaded</dt>
+  <dd><%= formatDate(file.uploadedAt) %></dd>
+
+  <dt>Folder</dt>
+  <dd>
+    <% if (file.folder) { %>
+      <a href="/drive/folders/<%= file.folder.id %>"><%= file.folder.name %></a>
+    <% } else { %>
+      <a href="/drive">My Drive</a>
+    <% } %>
+  </dd>
+</dl>
+
+<p>
+  <a class="button" href="/drive/files/<%= file.id %>/download">Download</a>
+  <form method="POST" action="/drive/files/<%= file.id %>/delete" class="inline">
+    <button type="submit" class="link-button">Delete</button>
+  </form>
+</p>
+
+<%- include('../partials/footer') %>

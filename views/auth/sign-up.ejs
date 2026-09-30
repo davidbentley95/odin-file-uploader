@@ -1,0 +1,26 @@
+<%- include('../partials/head', { title: 'Sign up' }) %>
+<%- include('../partials/nav') %>
+
+<h1>Create an account</h1>
+
+<%- include('../partials/errors', { errors }) %>
+
+<form method="POST" action="/sign-up" class="card">
+  <label>
+    <span>Username</span>
+    <input type="text" name="username" value="<%= username %>" required />
+  </label>
+  <label>
+    <span>Password</span>
+    <input type="password" name="password" required />
+  </label>
+  <label>
+    <span>Confirm password</span>
+    <input type="password" name="confirmPassword" required />
+  </label>
+  <button type="submit">Sign up</button>
+</form>
+
+<p>Already have an account? <a href="/log-in">Log in</a>.</p>
+
+<%- include('../partials/footer') %>

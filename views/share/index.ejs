@@ -1,0 +1,60 @@
+<%- include('../partials/head', { title }) %>
+
+<%# Deliberately not the site nav: a public visitor gets no links into the
+    authenticated area, no upload form, no rename and no delete. %>
+<header class="site-nav">
+  <div class="container nav-inner">
+    <span class="brand">Shared folder</span>
+    <span class="who">read-only · expires <%= share.expiresAt.toDateString() %></span>
+  </div>
+</header>
+<main class="container">
+
+<nav class="breadcrumbs">
+  <% breadcrumbs.forEach((crumb, index) => { %>
+    <% if (index > 0) { %>/<% } %>
+    <% if (index === breadcrumbs.length - 1) { %>
+      <%= crumb.name %>
+    <% } else { %>
+      <a href="/share/<%= share.id %>?folder=<%= crumb.id %>"><%= crumb.name %></a>
+    <% } %>
+  <% }) %>
+</nav>
+
+<h1><%= folder.name %></h1>
+
+<% if (!folders.length && !files.length) { %>
+  <p class="empty">This folder is empty.</p>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Size</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% folders.forEach((child) => { %>
+        <tr>
+          <td>
+            <a href="/share/<%= share.id %>?folder=<%= child.id %>"><%= child.name %></a>
+          </td>
+          <td class="meta">—</td>
+          <td class="actions"></td>
+        </tr>
+      <% }) %>
+      <% files.forEach((file) => { %>
+        <tr>
+          <td><%= file.name %></td>
+          <td class="meta"><%= formatSize(file.size) %></td>
+          <td class="actions">
+            <a href="/share/<%= share.id %>/files/<%= file.id %>/download">Download</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('../partials/footer') %>
